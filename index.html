@@ -9,88 +9,92 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            background-color: #000;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* Убираем полосы прокрутки */
+            overflow: hidden;
         }
 
-        /* Видео на весь экран */
+        /* --- НАСТРОЙКИ ВИДЕО --- */
         #bg-video {
             position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1; /* Отправляем видео на задний план */
-            object-fit: cover; /* Растягиваем без искажений */
-            filter: brightness(0.6); /* Чуть затемняем видео, чтобы текст читался */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Центрируем */
+            width: 90vw; /* Занимает 90% ширины экрана */
+            height: 90vh; /* Занимает 90% высоты экрана */
+            object-fit: contain; /* Видео вписывается целиком, не обрезаясь */
+            z-index: 0;
+            transition: opacity 0.5s ease; /* Плавное затухание */
         }
 
-        /* Контейнер с текстом поверх видео */
+        /* --- НАСТРОЙКИ ТЕКСТА --- */
         .content {
             position: relative;
-            z-index: 1;
+            z-index: 10;
             color: white;
             text-align: center;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.5); /* Полупрозрачная подложка */
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.6);
             border-radius: 15px;
             max-width: 700px;
             margin: 50px auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px); /* Эффект матового стекла */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
         }
 
-        h1 { font-size: 3em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+        h1 { font-size: 3em; margin-bottom: 10px; }
         h2 { font-weight: normal; margin-top: 0; margin-bottom: 30px; }
         p { line-height: 1.6; font-size: 1.1em; text-align: left; margin-bottom: 20px; }
         .highlight { font-weight: bold; color: #f1c40f; }
-        .status {
-            display: inline-block;
-            background: rgba(26, 188, 156, 0.8);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
         .footer { margin-top: 40px; font-size: 0.9em; color: #ccc; }
         
-        /* Адаптация для телефонов */
         @media (max-width: 600px) {
             .content { margin: 20px; padding: 20px; }
             h1 { font-size: 2em; }
+            #bg-video { width: 100vw; height: 100vh; } /* На телефоне на весь экран */
         }
     </style>
 </head>
 <body>
 
-    <!-- Наше видео с коптера -->
+    <!-- Наше видео -->
     <video autoplay muted loop playsinline id="bg-video">
         <source src="drone.mp4" type="video/mp4">
-        Ваш браузер не поддерживает видео.
     </video>
 
     <div class="content">
-        <div class="status">Сайт в разработке</div>
         <h1>Грицовский</h1>
         <h2>История, природа и люди нашего поселка</h2>
         
         <p>Добро пожаловать! Мы собираем историю нашего поселка по крупицам. Совсем скоро здесь появятся старые фотографии, воспоминания старожилов и краеведческие материалы.</p>
         
         <p><span class="highlight">Немного фактов:</span> Наш поселок был основан в <b>1954 году</b> как горняцкий при Грызловской шахте № 2. Название он получил от железнодорожной станции Грицово. Сегодня это тихое и уютное место с богатой историей.</p>
-        
+
         <div class="footer">
             Сайт создан с любовью к родному краю. 2026 г.
         </div>
     </div>
+
+    <!-- Скрипт для плавного зацикливания без дерганий -->
     <script>
-        // Замедляем фоновое видео
         document.addEventListener("DOMContentLoaded", function() {
             var vid = document.getElementById("bg-video");
-            if (vid) {
-                vid.playbackRate = 1; // 0.5 = в два раза медленнее (можно поставить 0.3 или 0.7)
-            }
+            
+            // Если видео было замедлено через код ранее, эта строка его "ускоряет" обратно (убирает дергание)
+            vid.playbackRate = 1.0; 
+            
+            // Плавное появление и исчезновение при повторе
+            vid.addEventListener('timeupdate', function() {
+                if (this.duration - this.currentTime < 1.0) {
+                    this.style.opacity = (this.duration - this.currentTime) / 1.0;
+                } else if (this.currentTime < 1.0) {
+                    this.style.opacity = this.currentTime / 1.0;
+                } else {
+                    this.style.opacity = 1;
+                }
+            });
         });
     </script>
+
 </body>
 </html>
