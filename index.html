@@ -4,95 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Грицовский - Наш дом</title>
-    
     <style>
-        /* ==================================================== */
-        /* 1. БАЗОВЫЕ НАСТРОЙКИ ВСЕЙ СТРАНИЦЫ                   */
-        /* ==================================================== */
         body, html {
-            margin: 0;              /* Убираем отступы по краям */
-            padding: 0;             /* Убираем внутренние поля */
-            height: 100%;           /* Высота на весь экран */
-            background-color: #000; /* Черный фон (на случай, если видео не загрузится) */
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #000;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;       /* Запрещаем прокрутку страницы (чтобы не было полос) */
         }
 
-        /* ==================================================== */
-        /* 2. БЛОК ВИДЕО (ЗАДНИЙ ПЛАН)                          */
-        /* ==================================================== */
+        /* ВИДЕО */
         #bg-video {
-            position: fixed;        /* Фиксируем на экране */
-            top: 50%;               /* Ставим по центру (сдвиг 50% сверху) */
-            left: 50%;              /* Ставим по центру (сдвиг 50% слева) */
-            transform: translate(-50%, -50%); /* Идеальное центрирование */
-            
-            width: 100vw;           /* Ширина 100% от экрана */
-            height: 100vh;          /* Высота 100% от экрана */
-            object-fit: contain;    /* Видео вписывается целиком (на компе будут черные полосы по краям) */
-            
-            z-index: 0;             /* Отправляем на самый задний план */
-            transition: opacity 0.5s ease; /* Плавное затухание при перезапуске */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain; /* Видео целиком по центру */
+            opacity: 1;          /* Жестко задаем непрозрачность */
+            z-index: -1;         /* Отправляем за текст */
         }
 
-        /* ==================================================== */
-        /* 3. БЛОК ТЕКСТА (ПЕРЕДНИЙ ПЛАН)                       */
-        /* ==================================================== */
+        /* ТЕКСТ */
         .content {
-            position: relative;     /* Чтобы z-index работал */
-            z-index: 10;            /* Поднимаем текст поверх видео */
-            color: white;           /* Белый текст */
-            text-align: center;     /* Выравнивание по центру */
-            padding: 30px;          /* Внутренние отступы */
-            
-            background: rgba(0, 0, 0, 0.6); /* Полупрозрачный черный фон (60% черного) */
-            border-radius: 15px;    /* Скругленные углы */
-            max-width: 700px;       /* Максимальная ширина окна */
-            margin: 50px auto;      /* Отступ сверху и центрирование по горизонтали */
-            
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8); /* Тень от окна */
-            backdrop-filter: blur(5px); /* Размытие фона под текстом (эффект стекла) */
+            position: relative;
+            z-index: 10;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.6); /* Темная подложка */
+            border-radius: 15px;
+            max-width: 700px;
+            margin: 50px auto;
         }
 
-        /* --- Стили для текста внутри окна --- */
         h1 { font-size: 3em; margin-bottom: 10px; }
         h2 { font-weight: normal; margin-top: 0; margin-bottom: 30px; }
         p { line-height: 1.6; font-size: 1.1em; text-align: left; margin-bottom: 20px; }
-        .highlight { font-weight: bold; color: #f1c40f; } /* Желтый акцент */
-        .footer { margin-top: 40px; font-size: 0.9em; color: #ccc; }
+        .highlight { font-weight: bold; color: #f1c40f; }
 
-             /* ==================================================== */
-        /* 4. АДАПТАЦИЯ ПОД МОБИЛЬНЫЕ ТЕЛЕФОНЫ                  */
-        /* ==================================================== */
+        /* ТЕЛЕФОНЫ */
         @media (max-width: 768px) {
-            #bg-video {
-                object-fit: cover; /* На телефоне видео заполняет весь экран */
-            }
-            
-            .content { 
-                margin: 15px;
-                padding: 15px;
-                background: transparent; /* Делаем фон ПОЛНОСТЬЮ прозрачным */
-                box-shadow: none;        /* Убираем тень от окна */
-                backdrop-filter: none;   /* Убираем размытие */
-            }
-            
-            /* Делаем текст читаемым на любом фоне (добавляем тень каждой букве) */
-            h1, h2, p, .footer { 
-                text-shadow: 2px 2px 5px rgba(0, 0, 0, 1); /* Черная тень вокруг букв */
-            }
+            #bg-video { object-fit: cover; } /* На телефоне растягиваем */
+            .content { margin: 15px; padding: 15px; background: rgba(0, 0, 0, 0.5); }
             h1 { font-size: 2em; }
         }
-    <!-- ==================================================== -->
-    <!-- БЛОК 1: ВИДЕО С КОПТЕРА                              -->
-    <!-- ==================================================== -->
+    </style>
+</head>
+<body>
+
     <video autoplay muted loop playsinline id="bg-video">
         <source src="drone.mp4" type="video/mp4">
     </video>
 
-    <!-- ==================================================== -->
-    <!-- БЛОК 2: ТЕКСТОВОЕ ОКНО ПОВЕРХ ВИДЕО                  -->
-    <!-- ==================================================== -->
     <div class="content">
         <h1>Грицовский</h1>
         <h2>История, природа и люди нашего поселка</h2>
@@ -101,39 +66,10 @@
         
         <p><span class="highlight">Немного фактов:</span> Наш поселок был основан в <b>1954 году</b> как горняцкий при Грызловской шахте № 2. Название он получил от железнодорожной станции Грицово. Сегодня это тихое и уютное место с богатой историей.</p>
 
-        <div class="footer">
+        <div style="margin-top: 40px; font-size: 0.9em; color: #ccc;">
             Сайт создан с любовью к родному краю. 2026 г.
         </div>
     </div>
-
-    <!-- ==================================================== -->
-    <!-- БЛОК 3: СКРИПТ (Логика)                              -->
-    <!-- ==================================================== -->
-    <script>
-        // Ждем, пока страница полностью загрузится
-        document.addEventListener("DOMContentLoaded", function() {
-            var vid = document.getElementById("bg-video");
-            
-            // Убеждаемся, что видео играет с нормальной скоростью (без дерганий)
-            vid.playbackRate = 1.0; 
-            
-            // Следим за временем, чтобы сделать плавный переход в конце
-            vid.addEventListener('timeupdate', function() {
-                // За 1 секунду до конца начинаем плавно уменьшать прозрачность
-                if (this.duration - this.currentTime < 1.0) {
-                    this.style.opacity = (this.duration - this.currentTime) / 1.0;
-                } 
-                // В первые 1 секунду после начала плавно увеличиваем прозрачность
-                else if (this.currentTime < 1.0) {
-                    this.style.opacity = this.currentTime / 1.0;
-                } 
-                // В остальное время показываем видео на 100%
-                else {
-                    this.style.opacity = 1;
-                }
-            });
-        });
-    </script>
 
 </body>
 </html>
